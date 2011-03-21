@@ -14,7 +14,9 @@
 // generally being a nice JavaScript object.
 
 // check if java is enabled, if not launch the dummy version
-if (!navigator.javaEnabled()) {
+// for now, prevent MSIE from using the Java bigint, because it's having issues
+// TOFIX ASAP 2011-03-20
+if (navigator.appName == "Microsoft Internet Explorer" || !navigator.javaEnabled()) {
     /*    var script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = 'js/bigint.dummy.js';
