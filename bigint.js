@@ -20,14 +20,15 @@ if (!navigator.javaEnabled()) {
     script.src = 'js/bigint.dummy.js';
     document.getElementsByTagName('head')[0].appendChild(script);
     */
-    BigInt = {}
+    USE_SJCL = true;
+/*    BigInt = {}
     BigInt.setup = function(callback, fail_callback) {
 	if (fail_callback) {
 	    fail_callback();
 	} else {
 	    alert('no java, and no way to recover');
 	}
-    }
+    } */
 } else {
 
 BigInt = Class.extend({
@@ -36,7 +37,9 @@ BigInt = Class.extend({
       throw "null value!";
     }
     
-    if (BigInt.use_applet) {
+    if (USE_SJCL) {
+      this._java_bigint = new BigInteger(value, radix);
+    } else if (BigInt.use_applet) {
       this._java_bigint = BigInt.APPLET.newBigInteger(value, radix);
     } else {
       try {
