@@ -30,6 +30,8 @@ if (!navigator.javaEnabled()) {
 	}
     } */
 } else {
+    USE_SJCL = false;
+}
 
 BigInt = Class.extend({
   init: function(value, radix) {
@@ -200,4 +202,4 @@ $(document).ready(function() {
     BigInt.use_applet = check_applet();
 });
 
-}
+//}
