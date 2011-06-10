@@ -167,14 +167,22 @@ BigInt._setup = function() {
     this.num_invocations += 1;
 
     if (this.num_invocations > 5) {
-      if (BigInt.setup_interval)
-        window.clearInterval(BigInt.setup_interval);
+      // try SJCL
+	if (!USE_SJCL) {
+	    USE_SJCL = true;
+	    this.num_invocations = 1;
+	    BigInt.use_applet = false;
+	} else {
+
+	    if (BigInt.setup_interval)
+		window.clearInterval(BigInt.setup_interval);
       
-      if (BigInt.setup_fail) {
-        BigInt.setup_fail();
-      } else {
-        alert('bigint failed!');
-      }
+	    if (BigInt.setup_fail) {
+		BigInt.setup_fail();
+	    } else {
+		alert('bigint failed!');
+	    }
+	}
     }
     return;
   }
