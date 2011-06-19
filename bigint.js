@@ -22,15 +22,18 @@ if (navigator.appName == "Microsoft Internet Explorer" || !navigator.javaEnabled
     script.src = 'js/bigint.dummy.js';
     document.getElementsByTagName('head')[0].appendChild(script);
     */
-    BigInt = {}
+    USE_SJCL = true;
+/*    BigInt = {}
     BigInt.setup = function(callback, fail_callback) {
 	if (fail_callback) {
 	    fail_callback();
 	} else {
 	    alert('no java, and no way to recover');
 	}
-    }
+    } */
 } else {
+    USE_SJCL = false;
+}
 
 BigInt = Class.extend({
   init: function(value, radix) {
@@ -38,7 +41,9 @@ BigInt = Class.extend({
       throw "null value!";
     }
     
-    if (BigInt.use_applet) {
+    if (USE_SJCL) {
+      this._java_bigint = new BigInteger(value, radix);
+    } else if (BigInt.use_applet) {
       this._java_bigint = BigInt.APPLET.newBigInteger(value, radix);
     } else {
       try {
@@ -163,14 +168,22 @@ BigInt._setup = function() {
     this.num_invocations += 1;
 
     if (this.num_invocations > 5) {
-      if (BigInt.setup_interval)
-        window.clearInterval(BigInt.setup_interval);
+      // try SJCL
+	if (!USE_SJCL) {
+	    USE_SJCL = true;
+	    this.num_invocations = 1;
+	    BigInt.use_applet = false;
+	} else {
+
+	    if (BigInt.setup_interval)
+		window.clearInterval(BigInt.setup_interval);
       
-      if (BigInt.setup_fail) {
-        BigInt.setup_fail();
-      } else {
-        alert('bigint failed!');
-      }
+	    if (BigInt.setup_fail) {
+		BigInt.setup_fail();
+	    } else {
+		alert('bigint failed!');
+	    }
+	}
     }
     return;
   }
@@ -198,4 +211,4 @@ $(document).ready(function() {
     BigInt.use_applet = check_applet();
 });
 
-}
+//}
