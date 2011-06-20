@@ -241,8 +241,9 @@ HELIOS.EncryptedAnswer = Class.extend({
     
     // possible plaintexts [question.min .. , question.max]
     var plaintexts = null;
-    if (question.max != null)
+    if (question.max != null) {
       plaintexts = UTILS.generate_plaintexts(pk, question.min, question.max);
+    }
     
     var zero_one_plaintexts = UTILS.generate_plaintexts(pk, 0, 1);
     
@@ -260,7 +261,7 @@ HELIOS.EncryptedAnswer = Class.extend({
     for (var i=0; i<question.answers.length; i++) {
       var index, plaintext_index;
       // if this is the answer, swap them so m is encryption 1 (g)
-      if (_(answer).include(i) > -1) {
+      if (_(answer).include(i)) {
         plaintext_index = 1;
         num_selected_answers += 1;
       } else {
@@ -304,8 +305,9 @@ HELIOS.EncryptedAnswer = Class.extend({
       var overall_plaintext_index = num_selected_answers;
       if (question.min)
         overall_plaintext_index -= question.min;
-        
+      
       overall_proof = hom_sum.generateDisjunctiveProof(plaintexts, overall_plaintext_index, rand_sum, ElGamal.disjunctive_challenge_generator);
+
       if (progress) {
         for (var i=0; i<question.max; i++)
           progress.tick();
@@ -471,7 +473,7 @@ HELIOS.EncryptedVote = Class.extend({
   },
   
   get_hash: function() {
-    return b64_sha256(JSON.stringify(this));
+     return b64_sha256(JSON.stringify(this.toJSONObject()));
   },
   
   get_audit_trail: function() {

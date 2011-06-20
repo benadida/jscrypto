@@ -247,7 +247,6 @@ ElGamal.Ciphertext = Class.extend({
     // note how the interface is as such so that the result does not reveal which is the real proof.
     var self = this;
     
-    console.log(list_of_plaintexts);
     var proofs = _(list_of_plaintexts).map(function(plaintext, p_num) {
       if (p_num == real_index) {
         // no real proof yet
@@ -286,7 +285,7 @@ ElGamal.Ciphertext = Class.extend({
     
     // set the real proof
     proofs[real_index] = real_proof;
-        
+
     return new ElGamal.DisjunctiveProof(proofs);
   },
   
