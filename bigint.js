@@ -112,6 +112,32 @@ BigInt.fromInt = function(i) {
   return BigInt.fromJSONObject("" + i);
 };
 
+// force check for Chrome on Mac issues
+BigInt.patchForChrome = function(serialize_obj_func) {
+    var serialized;
+    var num_tries = 0;
+    while (true) {
+	serialized = serialize_obj_func();
+
+	// null
+	if (!serialized)
+	    return serialized;
+
+	if (serialized.indexOf('[object') == -1)
+	    break;
+
+	// that's right, we're doing this a few times, because apparently it takes more than once
+	BigInt.prototype.toJSONObject = function() {return this._java_bigint.toString();};
+	num_tries += 1;
+	if (num_tries > 20) {
+	    alert('There was a weird error encrypting your vote. We	recommend trying a different browser.');
+	    throw "problem with java in your browser";
+	}
+    }
+    console.log("NUM TRIES: "+ num_tries);
+    return serialized;
+};
+
 //
 // do the applet check
 //
