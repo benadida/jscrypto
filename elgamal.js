@@ -528,7 +528,7 @@ ElGamal.disjunctive_challenge_generator = function(commitments) {
     });
   });
   
-  console.log(strings_to_hash);
+  // console.log(strings_to_hash);
   // STRINGS = strings_to_hash;
   return new BigInt(hex_sha1(strings_to_hash.join(",")), 16);
 };
