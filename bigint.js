@@ -134,7 +134,8 @@ BigInt.patchForChrome = function(serialize_obj_func) {
 	    throw "problem with java in your browser";
 	}
     }
-    console.log("NUM TRIES: "+ num_tries);
+    
+    // console.log("NUM TRIES: "+ num_tries);
     return serialized;
 };
 
